@@ -21,6 +21,7 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    private String email;
     private Long produto;
     private BigDecimal valor;
     @Column(name = "data_compra")

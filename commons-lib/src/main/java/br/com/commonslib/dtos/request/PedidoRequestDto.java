@@ -1,10 +1,7 @@
 package br.com.commonslib.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.math.BigDecimal;
@@ -16,6 +13,9 @@ public record PedidoRequestDto(
         @NotNull(message = "O campo produto é obrigatório.")
         @Min(value = 1, message = "O campo produto não pode ser negativo.")
         Long produto,
+        @NotEmpty(message = "O campo e-mail é obrigatório")
+        @Email(message = "O campo e-mail é obrigatório")
+        String email,
         @NotNull(message = "O campo valor é obrigatório")
         BigDecimal valor,
         @NotNull(message = "O campo data_compra é obrigatório")
