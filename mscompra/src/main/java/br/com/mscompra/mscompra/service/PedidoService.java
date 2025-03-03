@@ -2,6 +2,7 @@ package br.com.mscompra.mscompra.service;
 
 import br.com.commonslib.dtos.request.PedidoRequestDto;
 import br.com.commonslib.dtos.response.PedidoResponseDto;
+import br.com.mscompra.mscompra.config.rabbit.producer.PedidoProducer;
 import br.com.mscompra.mscompra.mapper.PedidoMapper;
 import br.com.mscompra.mscompra.model.Pedido;
 import br.com.mscompra.mscompra.repository.PedidoRepository;
@@ -14,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final PedidoProducer producer;
 
     @Transactional
     public PedidoResponseDto salvarPedido(PedidoRequestDto pedidoRequestDto){
       Pedido pedido = PedidoMapper.INSTANCE.pedidoRequestDtoToPedido(pedidoRequestDto);
       pedido = pedidoRepository.save(pedido);
-      return PedidoMapper.INSTANCE.pedidoToPedidoResponseDto(pedido);
+      PedidoResponseDto pedidoResponseDto =  PedidoMapper.INSTANCE.pedidoToPedidoResponseDto(pedido);
+      producer.enviarPedido(pedidoResponseDto);
+      return pedidoResponseDto;
     }
 }
